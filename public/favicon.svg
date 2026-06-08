@@ -1,3 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <text y="80" font-size="80">🧋</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="cup" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F5EDE0"/>
+      <stop offset="100%" stop-color="#E8DCC8"/>
+    </linearGradient>
+    <linearGradient id="tea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#C9A96E"/>
+      <stop offset="100%" stop-color="#A68A4E"/>
+    </linearGradient>
+  </defs>
+  <!-- Cup body -->
+  <rect x="128" y="156" width="256" height="248" rx="32" fill="url(#cup)" stroke="#C4B89A" stroke-width="12"/>
+  <!-- Tea liquid -->
+  <rect x="140" y="188" width="232" height="200" rx="24" fill="url(#tea)" opacity="0.85"/>
+  <!-- Foam/bubbles -->
+  <circle cx="210" cy="210" r="14" fill="#F5EDE0" opacity="0.7"/>
+  <circle cx="270" cy="198" r="10" fill="#F5EDE0" opacity="0.6"/>
+  <circle cx="310" cy="220" r="12" fill="#F5EDE0" opacity="0.5"/>
+  <!-- Cup rim -->
+  <rect x="124" y="148" width="264" height="24" rx="12" fill="#F5EDE0" stroke="#C4B89A" stroke-width="8"/>
+  <!-- Straw -->
+  <rect x="340" y="50" width="20" height="200" rx="10" fill="#E8D5A0" stroke="#C4B89A" stroke-width="4" transform="rotate(12, 350, 150)"/>
+  <!-- Steam -->
+  <path d="M180 130 Q175 110 185 90 Q195 70 185 50" fill="none" stroke="#D4C5B2" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
+  <path d="M230 120 Q225 100 235 80 Q245 60 235 40" fill="none" stroke="#D4C5B2" stroke-width="6" stroke-linecap="round" opacity="0.4"/>
+  <path d="M280 125 Q275 105 285 85 Q295 65 285 45" fill="none" stroke="#D4C5B2" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
 </svg>
