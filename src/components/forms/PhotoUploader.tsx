@@ -24,7 +24,7 @@ export default function PhotoUploader({ currentImage, onImageChange }: Props) {
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={handleFile} className="hidden" />
+      <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
 
       <div
         onClick={() => fileRef.current?.click()}

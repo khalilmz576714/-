@@ -37,6 +37,37 @@ export default function SummaryPage() {
             />
           </div>
 
+          {/* Custom date range */}
+          {state.filters.period === 'custom' && (
+            <div className="px-4 pb-3 flex gap-3 items-center">
+              <input
+                type="date"
+                value={state.filters.customStart || ''}
+                onChange={(e) => setFilter({ customStart: e.target.value || null })}
+                max={new Date().toISOString().split('T')[0]}
+                className="flex-1 px-3 py-2.5 rounded-xl text-sm border transition-colors"
+                style={{
+                  backgroundColor: 'var(--color-card)',
+                  color: 'var(--color-text)',
+                  borderColor: 'var(--color-border)',
+                }}
+              />
+              <span style={{ color: 'var(--color-muted)' }}>至</span>
+              <input
+                type="date"
+                value={state.filters.customEnd || ''}
+                onChange={(e) => setFilter({ customEnd: e.target.value || null })}
+                max={new Date().toISOString().split('T')[0]}
+                className="flex-1 px-3 py-2.5 rounded-xl text-sm border transition-colors"
+                style={{
+                  backgroundColor: 'var(--color-card)',
+                  color: 'var(--color-text)',
+                  borderColor: 'var(--color-border)',
+                }}
+              />
+            </div>
+          )}
+
           {/* Stat cards grid */}
           <div className="px-4 flex gap-3 flex-wrap">
             <StatCard label="总花费" value={`¥${stats.totalSpent}`} subtitle={`${stats.count} 杯`} accent />
