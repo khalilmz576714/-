@@ -117,14 +117,8 @@ export default function SummaryPage() {
           {/* Charts */}
           <div className="px-4 mt-4 space-y-3">
             <SpendingTrend entries={entries} />
-            <div className="flex gap-3">
-              <div className="flex-1">
-                <ShopDonut entries={entries} />
-              </div>
-              <div className="flex-1">
-                <TasteRadar entries={entries} />
-              </div>
-            </div>
+            <ShopDonut entries={entries} />
+            <TasteRadar entries={entries} />
           </div>
         </>
       )}
