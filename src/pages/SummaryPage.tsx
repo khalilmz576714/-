@@ -3,6 +3,9 @@ import { useTeaDiary } from '../context/TeaDiaryContext';
 import StatCard from '../components/cards/StatCard';
 import ChipGroup from '../components/ui/ChipGroup';
 import EmptyState from '../components/ui/EmptyState';
+import TasteRadar from '../components/charts/TasteRadar';
+import ShopDonut from '../components/charts/ShopDonut';
+import SpendingTrend from '../components/charts/SpendingTrend';
 import type { Period } from '../types';
 import { PERIOD_LABELS } from '../types';
 
@@ -68,7 +71,7 @@ export default function SummaryPage() {
             </div>
           )}
 
-          {/* Stat cards grid */}
+          {/* Stat cards */}
           <div className="px-4 flex gap-3 flex-wrap">
             <StatCard label="总花费" value={`¥${stats.totalSpent}`} subtitle={`${stats.count} 杯`} accent />
             <StatCard label="均价" value={`¥${stats.avgPrice}`} />
@@ -84,7 +87,7 @@ export default function SummaryPage() {
 
           {/* Comparison */}
           {stats.comparison && (
-            <div className="px-4 mt-4">
+            <div className="px-4 mt-3">
               <div className="rounded-card p-4" style={{ backgroundColor: 'var(--color-card)', border: '1px solid var(--color-border)' }}>
                 <div className="text-xs font-medium mb-3" style={{ color: 'var(--color-muted)' }}>
                   {stats.comparison.currentLabel} vs {stats.comparison.previousLabel}
@@ -111,30 +114,16 @@ export default function SummaryPage() {
             </div>
           )}
 
-          {/* Shop breakdown */}
-          <div className="px-4 mt-4">
-            <div className="rounded-card p-4" style={{ backgroundColor: 'var(--color-card)', border: '1px solid var(--color-border)' }}>
-              <div className="text-xs font-medium mb-3" style={{ color: 'var(--color-muted)' }}>按店铺分布</div>
-              {(() => {
-                const shopMap = new Map<string, { count: number; spent: number }>();
-                for (const e of entries) {
-                  const key = e.shop || '未标记';
-                  const cur = shopMap.get(key) || { count: 0, spent: 0 };
-                  cur.count++;
-                  cur.spent += e.price;
-                  shopMap.set(key, cur);
-                }
-                const shops = [...shopMap.entries()].sort((a, b) => b[1].spent - a[1].spent);
-                if (shops.length === 0) return <div className="text-xs" style={{ color: 'var(--color-muted)' }}>暂无数据</div>;
-                return shops.slice(0, 5).map(([name, data]) => (
-                  <div key={name} className="flex items-center justify-between py-2 border-b last:border-b-0" style={{ borderColor: 'var(--color-border)' }}>
-                    <span className="text-sm" style={{ color: 'var(--color-text)' }}>{name}</span>
-                    <span className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>
-                      ¥{data.spent} <span className="text-xs opacity-50">{data.count}杯</span>
-                    </span>
-                  </div>
-                ));
-              })()}
+          {/* Charts */}
+          <div className="px-4 mt-4 space-y-3">
+            <SpendingTrend entries={entries} />
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <ShopDonut entries={entries} />
+              </div>
+              <div className="flex-1">
+                <TasteRadar entries={entries} />
+              </div>
             </div>
           </div>
         </>

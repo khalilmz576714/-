@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>汇总页图表 — 方案预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #FAF8F5;
+    font-family: Georgia, 'Noto Serif SC', serif;
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+    color: #4A3728;
+  }
+  h1 { text-align: center; font-size: 24px; margin-bottom: 4px; }
+  .subtitle { text-align: center; font-size: 12px; color: #9B8C7C; margin-bottom: 24px; }
+  h2 { font-size: 18px; margin: 28px 0 6px; padding: 6px 12px; display: inline-block; border-radius: 20px; }
+  .plan-a h2 { background: #F0EBE3; }
+  .plan-b h2 { background: #E8EFE0; }
+  .plan-c h2 { background: rgba(201,169,110,0.15); }
+  .desc { font-size: 12px; color: #9B8C7C; margin-bottom: 14px; line-height: 1.6; }
+
+  .mockup {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .mockup-title { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: #4A3728; }
+
+  /* Bar chart mockup */
+  .bar-chart { display: flex; align-items: flex-end; gap: 12px; height: 120px; padding: 0 4px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .bar { width: 100%; border-radius: 6px 6px 0 0; min-height: 4px; }
+  .bar-label { font-size: 10px; color: #9B8C7C; }
+  .bar-val { font-size: 10px; font-weight: 600; }
+
+  /* Donut mockup */
+  .donut-row { display: flex; align-items: center; gap: 20px; }
+  .donut-visual { width: 100px; height: 100px; border-radius: 50%; position: relative; flex-shrink: 0; }
+  .donut-visual::after { content: ''; position: absolute; top: 28px; left: 28px; width: 44px; height: 44px; border-radius: 50%; background: #fff; }
+  .donut-legend { flex: 1; }
+  .donut-item { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; font-size: 11px; }
+  .donut-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .donut-name { flex: 1; color: #4A3728; }
+  .donut-val { font-weight: 600; color: #4A3728; font-size: 11px; }
+
+  /* Line chart mockup (ASCII-ish) */
+  .line-chart { position: relative; height: 100px; border-left: 1px solid #e0dcd5; border-bottom: 1px solid #e0dcd5; margin: 0 4px 20px 24px; }
+  .line-grid { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+  .line-grid-line { position: absolute; left: 0; right: 0; border-top: 1px dashed #f0ebe3; }
+  .line-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  .line-labels { display: flex; justify-content: space-between; margin-top: 4px; font-size: 10px; color: #9B8C7C; padding-left: 24px; }
+
+  /* Heatmap */
+  .heatmap { display: flex; gap: 3px; flex-wrap: wrap; }
+  .heat-cell { width: 28px; height: 28px; border-radius: 4px; }
+  .heat-legend { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 10px; color: #9B8C7C; }
+  .heat-swatch { width: 12px; height: 12px; border-radius: 3px; }
+
+  /* Radar mockup */
+  .radar { width: 140px; height: 140px; margin: 0 auto; position: relative; }
+  .radar-ring { position: absolute; border-radius: 50%; border: 1px solid #e8e0d5; }
+  .radar-labels { display: flex; justify-content: space-around; margin-top: 8px; font-size: 10px; color: #9B8C7C; }
+
+  .highlight { color: #C9A96E; font-weight: 600; }
+  .tag { display: inline-block; font-size: 10px; padding: 3px 8px; border-radius: 10px; margin: 2px 4px 2px 0; }
+  .tag-good { background: #E8EFE0; color: #4a6b3a; }
+  .tag-ok { background: #FFF8ED; color: #C9A96E; }
+  .tag-bad { background: #FEF0F0; color: #c96a6a; }
+</style>
+</head>
+<body>
+
+<h1>📊 汇总页可视化图表</h1>
+<p class="subtitle">三版方案预览</p>
+
+<!-- ==================== A 版 ==================== -->
+<div class="plan-a">
+<h2>A 版 · 经典仪表盘</h2>
+<p class="desc">
+  4-5 个小图表卡片排列，涵盖消费趋势、店铺分布、评分偏好。<br>
+  <span class="highlight">特点：</span>信息全、图表类型多样、一目了然。
+</p>
+
+<div class="mockup">
+  <div class="mockup-title">📈 近30天消费趋势</div>
+  <div class="line-chart">
+    <div class="line-grid">
+      <div class="line-grid-line" style="top: 25%"></div>
+      <div class="line-grid-line" style="top: 50%"></div>
+      <div class="line-grid-line" style="top: 75%"></div>
+    </div>
+    <svg class="line-svg" viewBox="0 0 360 100">
+      <defs><linearGradient id="gradA" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C9A96E" stop-opacity="0.3"/><stop offset="100%" stop-color="#C9A96E" stop-opacity="0"/></linearGradient></defs>
+      <path d="M0,80 C30,75 50,60 70,55 C90,48 110,40 130,45 C160,52 180,35 200,30 C225,24 245,18 260,25 C280,35 300,20 320,15 C340,10 360,5 360,5" fill="none" stroke="#C9A96E" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M0,80 C30,75 50,60 70,55 C90,48 110,40 130,45 C160,52 180,35 200,30 C225,24 245,18 260,25 C280,35 300,20 320,15 C340,10 360,5 360,5 L360,100 L0,100 Z" fill="url(#gradA)"/>
+    </svg>
+  </div>
+  <div class="line-labels"><span>5/10</span><span>5/17</span><span>5/24</span><span>5/31</span><span>6/7</span></div>
+</div>
+
+<div class="mockup" style="display:flex; gap: 12px;">
+  <div style="flex:1;">
+    <div class="mockup-title">🏪 店铺分布</div>
+    <div class="donut-row">
+      <div class="donut-visual" style="background: conic-gradient(#C9A96E 0% 45%, #D4C5B2 45% 70%, #E8DCC8 70% 85%, #F0EBE3 85% 100%);"></div>
+      <div class="donut-legend">
+        <div class="donut-item"><div class="donut-dot" style="background:#C9A96E"></div><span class="donut-name">喜茶</span><span class="donut-val">¥85</span></div>
+        <div class="donut-item"><div class="donut-dot" style="background:#D4C5B2"></div><span class="donut-name">奈雪</span><span class="donut-val">¥48</span></div>
+        <div class="donut-item"><div class="donut-dot" style="background:#E8DCC8"></div><span class="donut-name">茶百道</span><span class="donut-val">¥32</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mockup">
+  <div class="mockup-title">⭐ 评分分布</div>
+  <div class="bar-chart">
+    <div class="bar-col"><span class="bar-val">2</span><div class="bar" style="height:86px;background:#D4C5B2"></div><span class="bar-label">⭐1</span></div>
+    <div class="bar-col"><span class="bar-val">1</span><div class="bar" style="height:43px;background:#D4C5B2"></div><span class="bar-label">⭐2</span></div>
+    <div class="bar-col"><span class="bar-val">4</span><div class="bar" style="height:57px;background:#C9A96E"></div><span class="bar-label">⭐3</span></div>
+    <div class="bar-col"><span class="bar-val">8</span><div class="bar" style="height:75px;background:#C9A96E"></div><span class="bar-label">⭐4</span></div>
+    <div class="bar-col"><span class="bar-val">12</span><div class="bar" style="height:100px;background:#B8954E"></div><span class="bar-label">⭐5</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== B 版 ==================== -->
+<div class="plan-b">
+<h2>B 版 · 日历热力 + 极简环形</h2>
+<p class="desc">
+  仿 GitHub 贡献图的热力日历作为主视觉（哪天喝了奶茶一眼可见），<br>
+  配合一个迷你环形图展示店铺占比。<br>
+  <span class="highlight">特点：</span>热力图视觉冲击力强、精致、像艺术品。
+</p>
+
+<div class="mockup">
+  <div class="mockup-title">🗓️ 本月奶茶日历</div>
+  <div style="display:flex; gap: 3px; flex-wrap: wrap; margin-bottom: 8px;">
+    <script>
+      const cells = [];
+      for (let i = 0; i < 30; i++) {
+        const v = Math.floor(Math.random() * 4);
+        let bg;
+        if (v === 0) bg = '#F5F3F0';
+        else if (v === 1) bg = '#E8DCC8';
+        else if (v === 2) bg = '#D4C5B2';
+        else bg = '#C9A96E';
+        cells.push(bg);
+      }
+      document.write(cells.map(bg =>
+        `<span style="display:inline-block;width:26px;height:26px;border-radius:5px;background:${bg};margin:1px;" title="${bg}"></span>`
+      ).join(''));
+    </script>
+  </div>
+  <div class="heat-legend">
+    <span>少</span>
+    <span class="heat-swatch" style="background:#F5F3F0"></span>
+    <span class="heat-swatch" style="background:#E8DCC8"></span>
+    <span class="heat-swatch" style="background:#D4C5B2"></span>
+    <span class="heat-swatch" style="background:#C9A96E"></span>
+    <span>多（杯数）</span>
+  </div>
+</div>
+
+<div class="mockup" style="display:flex; gap: 16px; align-items: center;">
+  <div style="flex:1;">
+    <div class="mockup-title">🏪 店铺占比</div>
+    <div class="donut-row">
+      <div class="donut-visual" style="width:80px;height:80px;background: conic-gradient(#5b8c4e 0% 50%, #8ab87a 50% 72%, #b8d8a8 72% 88%, #d8e8d0 88% 100%);"></div>
+      <div class="donut-legend">
+        <div class="donut-item"><div class="donut-dot" style="background:#5b8c4e"></div><span class="donut-name">喜茶</span><span class="donut-val">50%</span></div>
+        <div class="donut-item"><div class="donut-dot" style="background:#8ab87a"></div><span class="donut-name">奈雪</span><span class="donut-val">22%</span></div>
+        <div class="donut-item"><div class="donut-dot" style="background:#b8d8a8"></div><span class="donut-name">茶百道</span><span class="donut-val">16%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== C 版 ==================== -->
+<div class="plan-c">
+<h2>C 版 · 品味雷达 + 花销波浪</h2>
+<p class="desc">
+  用雷达图展示口味偏好（甜度/冰量/价格/评分的综合维度），<br>
+  配合波浪形消费曲线和一个迷你总分卡。<br>
+  <span class="highlight">特点：</span>设计感最强、像咖啡店菜单上的图表。
+</p>
+
+<div class="mockup">
+  <div class="mockup-title">🎯 口味画像（雷达图）</div>
+  <div style="display:flex; align-items: center; gap: 20px;">
+    <div class="radar" style="flex-shrink:0;">
+      <div class="radar-ring" style="top:8px;left:8px;right:8px;bottom:8px;"></div>
+      <div class="radar-ring" style="top:24px;left:24px;right:24px;bottom:24px;"></div>
+      <div class="radar-ring" style="top:40px;left:40px;right:40px;bottom:40px;"></div>
+      <svg width="140" height="140" style="position:absolute;top:0;left:0;">
+        <polygon points="70,10 100,40 95,80 70,105 45,80 40,40" fill="#C9A96E" fill-opacity="0.3" stroke="#C9A96E" stroke-width="2"/>
+      </svg>
+    </div>
+    <div style="flex:1; font-size:11px;">
+      <div style="margin-bottom:4px;"><span style="color:#C9A96E;">●</span> 甜度偏好: <b>半糖</b></div>
+      <div style="margin-bottom:4px;"><span style="color:#D4C5B2;">●</span> 冰量偏好: <b>少冰</b></div>
+      <div style="margin-bottom:4px;"><span style="color:#e8d0a0;">●</span> 均价区间: <b>¥15-25</b></div>
+      <div style="margin-bottom:4px;"><span style="color:#b8c8a0;">●</span> 最爱品牌: <b>喜茶</b></div>
+      <div><span style="color:#d0a0a0;">●</span> 平均评分: <b>4.2⭐</b></div>
+    </div>
+  </div>
+</div>
+
+<div class="mockup">
+  <div class="mockup-title">🌊 每周消费波浪</div>
+  <svg viewBox="0 0 360 90" style="width:100%;">
+    <defs>
+      <linearGradient id="waveGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#C9A96E" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="#C9A96E" stop-opacity="0.02"/>
+      </linearGradient>
+    </defs>
+    <path d="M0,50 C20,50 25,30 35,35 C45,40 50,55 60,40 C70,25 75,35 85,30 C95,25 100,45 110,35 C120,25 125,40 135,30 C145,20 150,45 160,28 C170,12 175,35 185,25 C195,15 200,40 210,22 C225,8 230,38 240,20 C250,5 255,30 265,18 C275,8 280,35 290,22 C300,10 305,30 315,15 C325,5 330,25 340,10 C350,2 355,20 360,12 L360,90 L0,90 Z" fill="url(#waveGrad)"/>
+    <path d="M0,50 C20,50 25,30 35,35 C45,40 50,55 60,40 C70,25 75,35 85,30 C95,25 100,45 110,35 C120,25 125,40 135,30 C145,20 150,45 160,28 C170,12 175,35 185,25 C195,15 200,40 210,22 C225,8 230,38 240,20 C250,5 255,30 265,18 C275,8 280,35 290,22 C300,10 305,30 315,15 C325,5 330,25 340,10 C350,2 355,20 360,12" fill="none" stroke="#C9A96E" stroke-width="2" stroke-linecap="round"/>
+    <!-- dots on peaks -->
+    <circle cx="35" cy="35" r="4" fill="#C9A96E"/><text x="35" y="26" text-anchor="middle" font-size="10" fill="#4A3728">¥32</text>
+    <circle cx="135" cy="30" r="4" fill="#C9A96E"/><text x="135" y="21" text-anchor="middle" font-size="10" fill="#4A3728">¥45</text>
+    <circle cx="240" cy="20" r="4" fill="#C9A96E"/><text x="240" y="11" text-anchor="middle" font-size="10" fill="#4A3728">¥28</text>
+  </svg>
+  <div class="line-labels"><span>第1周</span><span>第2周</span><span>第3周</span><span>第4周</span></div>
+</div>
+</div>
+
+<!-- Summary comparison -->
+<div style="background:#fff; border-radius:16px; padding:20px; margin-top: 20px;">
+  <table style="width:100%; font-size:12px; border-collapse: collapse;">
+    <tr style="border-bottom: 1px solid #F0EBE3;">
+      <th style="text-align:left; padding:8px 4px; color:#9B8C7C;">对比维度</th>
+      <th style="text-align:center; padding:8px 4px;">A 版</th>
+      <th style="text-align:center; padding:8px 4px;">B 版</th>
+      <th style="text-align:center; padding:8px 4px;">C 版</th>
+    </tr>
+    <tr style="border-bottom: 1px solid #f8f6f3;">
+      <td style="padding:8px 4px;">主视觉</td>
+      <td style="text-align:center;">折线+柱状</td>
+      <td style="text-align:center;">日历热力图</td>
+      <td style="text-align:center;">雷达+波浪</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #f8f6f3;">
+      <td style="padding:8px 4px;">信息量</td>
+      <td style="text-align:center;"><span class="tag tag-good">最全</span></td>
+      <td style="text-align:center;"><span class="tag tag-ok">适中</span></td>
+      <td style="text-align:center;"><span class="tag tag-ok">适中</span></td>
+    </tr>
+    <tr style="border-bottom: 1px solid #f8f6f3;">
+      <td style="padding:8px 4px;">精致感</td>
+      <td style="text-align:center;">⭐⭐⭐</td>
+      <td style="text-align:center;">⭐⭐⭐⭐</td>
+      <td style="text-align:center;">⭐⭐⭐⭐⭐</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #f8f6f3;">
+      <td style="padding:8px 4px;">开发量</td>
+      <td style="text-align:center;"><span class="tag tag-good">中等</span></td>
+      <td style="text-align:center;"><span class="tag tag-ok">较小</span></td>
+      <td style="text-align:center;"><span class="tag tag-bad">较大</span></td>
+    </tr>
+    <tr>
+      <td style="padding:8px 4px;">适合</td>
+      <td style="text-align:center; font-size:10px;">想看全貌</td>
+      <td style="text-align:center; font-size:10px;">记录频率高</td>
+      <td style="text-align:center; font-size:10px;">追求颜值</td>
+    </tr>
+  </table>
+</div>
+
+<p style="text-align:center; margin: 32px 0; color:#9B8C7C; font-size:13px;">
+  也可以组合搭配，比如 A 的折线图 + B 的日历 + C 的雷达，告诉我你的想法
+</p>
+
+</body>
+</html>
