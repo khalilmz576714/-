@@ -1,5 +1,6 @@
 export type IceLevel = 'no-ice' | 'less-ice' | 'normal-ice' | 'more-ice';
 export type SugarLevel = 'no-sugar' | 'less-sugar' | 'half-sugar' | 'normal-sugar' | 'more-sugar';
+export type CupSize = 'medium' | 'large' | 'xlarge';
 export type Theme = 'wabisabi' | 'matcha' | 'dark';
 export type Tab = 'journal' | 'favorites' | 'summary';
 export type ModalType = 'add' | 'edit' | 'detail' | 'settings' | null;
@@ -13,6 +14,7 @@ export interface Entry {
   image: string | null;
   iceLevel: IceLevel;
   sugarLevel: SugarLevel;
+  cupSize: CupSize | null;
   rating: number;
   review: string;
   isFavorite: boolean;
@@ -26,6 +28,7 @@ export interface Filters {
   period: Period | null;
   iceLevel: IceLevel | null;
   sugarLevel: SugarLevel | null;
+  cupSize: CupSize | null;
   customStart: string | null;
   customEnd: string | null;
   search: string;
@@ -87,6 +90,12 @@ export const SUGAR_LABELS: Record<SugarLevel, string> = {
   'half-sugar': '半糖',
   'normal-sugar': '正常糖',
   'more-sugar': '多糖',
+};
+
+export const CUP_SIZE_LABELS: Record<CupSize, string> = {
+  medium: '中杯',
+  large: '大杯',
+  xlarge: '超大杯',
 };
 
 export const THEME_LABELS: Record<Theme, string> = {

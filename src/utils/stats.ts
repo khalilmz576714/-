@@ -49,6 +49,9 @@ export function getFilteredEntries(entries: Entry[], filters: Filters): Entry[] 
   if (filters.sugarLevel) {
     result = result.filter((e) => e.sugarLevel === filters.sugarLevel);
   }
+  if (filters.cupSize) {
+    result = result.filter((e) => e.cupSize === filters.cupSize);
+  }
   if (filters.search) {
     const q = filters.search.toLowerCase();
     result = result.filter(

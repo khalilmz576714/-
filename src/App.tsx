@@ -8,7 +8,7 @@ import FavoritesPage from './pages/FavoritesPage';
 import SummaryPage from './pages/SummaryPage';
 import EntryForm from './components/forms/EntryForm';
 import SettingsPanel from './components/ui/SettingsPanel';
-import { ICE_LABELS, SUGAR_LABELS } from './types';
+import { ICE_LABELS, SUGAR_LABELS, CUP_SIZE_LABELS } from './types';
 
 function AppContent() {
   const { state, setTab, openModal, closeModal, addEntry, updateEntry, deleteEntry, toggleFavorite } = useTeaDiary();
@@ -86,6 +86,11 @@ function AppContent() {
               <span className="text-sm px-3 py-1.5 rounded-pill" style={{ backgroundColor: 'var(--color-surface-hover)', color: 'var(--color-text)' }}>
                 {SUGAR_LABELS[editingEntry.sugarLevel]}
               </span>
+              {editingEntry.cupSize && (
+                <span className="text-sm px-3 py-1.5 rounded-pill" style={{ backgroundColor: 'var(--color-surface-hover)', color: 'var(--color-text)' }}>
+                  {CUP_SIZE_LABELS[editingEntry.cupSize]}
+                </span>
+              )}
             </div>
             <StarRating value={editingEntry.rating} readonly size="lg" />
             {editingEntry.review && (

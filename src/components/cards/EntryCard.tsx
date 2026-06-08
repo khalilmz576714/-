@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Entry } from '../../types';
-import { ICE_LABELS, SUGAR_LABELS } from '../../types';
+import { ICE_LABELS, SUGAR_LABELS, CUP_SIZE_LABELS } from '../../types';
 import StarRating from '../ui/StarRating';
 
 interface Props {
@@ -63,6 +63,14 @@ export default function EntryCard({ entry, onTap, onToggleFavorite }: Props) {
             >
               {SUGAR_LABELS[entry.sugarLevel]}
             </span>
+            {entry.cupSize && (
+              <span
+                className="text-[10px] px-2.5 py-0.5 rounded-pill"
+                style={{ backgroundColor: 'var(--color-surface-hover)', color: 'var(--color-text)' }}
+              >
+                {CUP_SIZE_LABELS[entry.cupSize]}
+              </span>
+            )}
 
             <div className="ml-auto flex items-center gap-1">
               <StarRating value={entry.rating} readonly size="sm" />

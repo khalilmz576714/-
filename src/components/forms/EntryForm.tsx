@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import type { Entry, EntryInput, IceLevel, SugarLevel } from '../../types';
-import { ICE_LABELS, SUGAR_LABELS } from '../../types';
+import type { Entry, EntryInput, IceLevel, SugarLevel, CupSize } from '../../types';
+import { ICE_LABELS, SUGAR_LABELS, CUP_SIZE_LABELS } from '../../types';
 import PhotoUploader from './PhotoUploader';
 import DatePicker from './DatePicker';
 import StarRating from '../ui/StarRating';
@@ -27,6 +27,7 @@ export default function EntryForm({ initial, onSave, onUpdate, onClose }: Props)
   const [image, setImage] = useState<string | null>(initial?.image || null);
   const [iceLevel, setIceLevel] = useState<IceLevel>(initial?.iceLevel || DEFAULT_ICE);
   const [sugarLevel, setSugarLevel] = useState<SugarLevel>(initial?.sugarLevel || DEFAULT_SUGAR);
+  const [cupSize, setCupSize] = useState<CupSize | null>(initial?.cupSize || null);
   const [rating, setRating] = useState(initial?.rating || 3);
   const [review, setReview] = useState(initial?.review || '');
   const [drunkAt, setDrunkAt] = useState(initial?.drunkAt?.slice(0, 10) || todayStr());
@@ -42,6 +43,7 @@ export default function EntryForm({ initial, onSave, onUpdate, onClose }: Props)
       setImage(initial.image);
       setIceLevel(initial.iceLevel);
       setSugarLevel(initial.sugarLevel);
+      setCupSize(initial.cupSize);
       setRating(initial.rating);
       setReview(initial.review);
       setDrunkAt(initial.drunkAt.slice(0, 10));
@@ -69,6 +71,7 @@ export default function EntryForm({ initial, onSave, onUpdate, onClose }: Props)
       image,
       iceLevel,
       sugarLevel,
+      cupSize,
       rating,
       review: review.trim(),
       isFavorite,
@@ -181,6 +184,27 @@ export default function EntryForm({ initial, onSave, onUpdate, onClose }: Props)
               }}
             >
               {SUGAR_LABELS[level]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Cup Size (optional) */}
+      <div>
+        <label className="text-xs font-medium mb-2 block" style={{ color: 'var(--color-muted)' }}>杯型（选填）</label>
+        <div className="flex gap-2">
+          {([null, ...Object.keys(CUP_SIZE_LABELS)] as (CupSize | null)[]).map((size) => (
+            <button
+              key={size || 'none'}
+              onClick={() => setCupSize(size)}
+              className="flex-1 py-2.5 rounded-pill text-xs font-medium transition-all"
+              style={{
+                backgroundColor: cupSize === size ? 'var(--color-selected-bg)' : 'var(--color-card)',
+                color: cupSize === size ? 'var(--color-selected-text)' : 'var(--color-text)',
+                border: cupSize === size ? 'none' : '1px solid var(--color-border)',
+              }}
+            >
+              {size ? CUP_SIZE_LABELS[size] : '不限'}
             </button>
           ))}
         </div>

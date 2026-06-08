@@ -4,7 +4,7 @@ import EntryCard from '../components/cards/EntryCard';
 import EmptyState from '../components/ui/EmptyState';
 import ChipGroup from '../components/ui/ChipGroup';
 import SearchBar from '../components/ui/SearchBar';
-import { PERIOD_LABELS, ICE_LABELS, SUGAR_LABELS } from '../types';
+import { PERIOD_LABELS, ICE_LABELS, SUGAR_LABELS, CUP_SIZE_LABELS } from '../types';
 
 export default function JournalPage() {
   const { entries, state, stats, setFilter, openModal, toggleFavorite } = useTeaDiary();
@@ -15,6 +15,7 @@ export default function JournalPage() {
   ];
   const iceChips = Object.entries(ICE_LABELS).map(([value, label]) => ({ value, label }));
   const sugarChips = Object.entries(SUGAR_LABELS).map(([value, label]) => ({ value, label }));
+  const cupSizeChips = Object.entries(CUP_SIZE_LABELS).map(([value, label]) => ({ value, label }));
 
   return (
     <div className="pb-24">
@@ -48,6 +49,7 @@ export default function JournalPage() {
         <ChipGroup chips={periodChips} selected={state.filters.period || '__all__'} onChange={(v) => setFilter({ period: v === '__all__' ? null : v as any })} />
         <ChipGroup chips={iceChips} selected={state.filters.iceLevel} onChange={(v) => setFilter({ iceLevel: v as any })} />
         <ChipGroup chips={sugarChips} selected={state.filters.sugarLevel} onChange={(v) => setFilter({ sugarLevel: v as any })} />
+        <ChipGroup chips={cupSizeChips} selected={state.filters.cupSize} onChange={(v) => setFilter({ cupSize: v as any })} />
       </div>
 
       {/* Entry list */}
@@ -58,7 +60,7 @@ export default function JournalPage() {
             title={state.entries.length === 0 ? '还没有记录' : '没有匹配的记录'}
             description={state.entries.length === 0 ? '开始记录今天喝的第一杯奶茶吧' : '试试调整筛选条件'}
             actionLabel={state.entries.length === 0 ? '添加记录' : '清除筛选'}
-            onAction={() => state.entries.length === 0 ? openModal('add') : setFilter({ period: null, iceLevel: null, sugarLevel: null })}
+            onAction={() => state.entries.length === 0 ? openModal('add') : setFilter({ period: null, iceLevel: null, sugarLevel: null, cupSize: null })}
           />
         ) : (
           entries.map((entry) => (

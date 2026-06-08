@@ -7,13 +7,14 @@ export function exportAsJSON(entries: Entry[]): void {
 }
 
 export function exportAsCSV(entries: Entry[]): void {
-  const headers = ['名称', '店铺', '价格', '冰量', '糖度', '评分', '评价', '收藏', '日期'];
+  const headers = ['名称', '店铺', '价格', '冰量', '糖度', '杯型', '评分', '评价', '收藏', '日期'];
   const rows = entries.map((e) => [
     e.name,
     e.shop,
     e.price,
     iceMap(e.iceLevel),
     sugarMap(e.sugarLevel),
+    e.cupSize ? cupSizeMap(e.cupSize) : '',
     e.rating,
     e.review,
     e.isFavorite ? '是' : '否',
@@ -38,6 +39,11 @@ function iceMap(level: string): string {
 function sugarMap(level: string): string {
   const m: Record<string, string> = { 'no-sugar': '无糖', 'less-sugar': '三分糖', 'half-sugar': '半糖', 'normal-sugar': '正常糖', 'more-sugar': '多糖' };
   return m[level] || level;
+}
+
+function cupSizeMap(size: string): string {
+  const m: Record<string, string> = { medium: '中杯', large: '大杯', xlarge: '超大杯' };
+  return m[size] || size;
 }
 
 function formatDate(d: Date): string {

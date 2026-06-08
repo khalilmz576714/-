@@ -10,7 +10,7 @@ const initialState: DiaryState = {
   activeTab: 'journal',
   activeModal: null,
   editingId: null,
-  filters: { period: null, iceLevel: null, sugarLevel: null, customStart: null, customEnd: null, search: '' },
+  filters: { period: null, iceLevel: null, sugarLevel: null, cupSize: null, customStart: null, customEnd: null, search: '' },
   theme: 'wabisabi',
   dbReady: false,
   dbError: false,

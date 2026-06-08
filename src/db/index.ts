@@ -10,6 +10,9 @@ class TeaDiaryDB extends Dexie {
     this.version(1).stores({
       entries: 'id, drunkAt, price, isFavorite, iceLevel, sugarLevel, rating, createdAt',
     });
+    this.version(2).stores({
+      entries: 'id, drunkAt, price, isFavorite, iceLevel, sugarLevel, cupSize, rating, createdAt',
+    });
   }
 }
 
