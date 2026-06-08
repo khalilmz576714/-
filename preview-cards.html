@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>奶茶专属名片 — 三版预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #FAF8F5;
+    font-family: Georgia, 'Noto Serif SC', serif;
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  h2 { font-size: 22px; margin: 28px 0 8px; color: #4A3728; }
+  .sub { font-size: 13px; color: #9B8C7C; margin-bottom: 14px; }
+
+  /* ===== A 版：拍立得 ===== */
+  .card-a {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.04);
+    overflow: hidden;
+  }
+  .card-a .photo {
+    height: 200px;
+    background: linear-gradient(135deg, #F5EDE0 0%, #E8DCC8 50%, #D4C5B2 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 72px;
+  }
+  .card-a .body {
+    padding: 14px 16px 16px;
+    background: #fff;
+  }
+  .card-a .row1 { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .card-a .name { font-size: 18px; font-weight: 600; color: #4A3728; }
+  .card-a .price { font-size: 20px; font-weight: 700; color: #C9A96E; }
+  .card-a .row2 { font-size: 12px; color: #9B8C7C; margin-bottom: 10px; }
+  .card-a .tags { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+  .card-a .tag { font-size: 10px; padding: 3px 10px; border-radius: 12px; background: #F0EBE3; color: #4A3728; }
+  .card-a .row3 { display: flex; justify-content: space-between; align-items: center; }
+  .card-a .stars { color: #C9A96E; font-size: 14px; letter-spacing: 2px; }
+  .card-a .fav { font-size: 20px; }
+
+  /* ===== B 版：金边名片 ===== */
+  .card-b {
+    background: #3D3228;
+    border: 3px solid #C9A96E;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(201,169,110,0.3);
+  }
+  .card-b .inner {
+    border: 1.5px solid rgba(201,169,110,0.5);
+    border-radius: 8px;
+    padding: 16px;
+    background: linear-gradient(180deg, rgba(201,169,110,0.06) 0%, transparent 100%);
+  }
+  .card-b .row1 { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
+  .card-b .name { font-size: 20px; font-weight: 600; color: #E8D5C0; }
+  .card-b .price { font-size: 22px; font-weight: 700; color: #C9A96E; }
+  .card-b .row2 { font-size: 12px; color: #8B8FA0; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .card-b .row2 .stars { color: #C9A96E; }
+  .card-b .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .card-b .tag { font-size: 10px; padding: 3px 10px; border-radius: 12px; background: rgba(201,169,110,0.15); color: #C9A96E; }
+  .card-b .fav { text-align: right; margin-top: -20px; font-size: 20px; }
+
+  /* ===== C 版：侧边色带 ===== */
+  .card-c {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .card-c .stripe {
+    width: 6px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #C9A96E 0%, #E8D5A0 50%, #C9A96E 100%);
+  }
+  .card-c .body {
+    padding: 16px 18px;
+    flex: 1;
+  }
+  .card-c .row1 { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
+  .card-c .name { font-size: 17px; font-weight: 600; color: #4A3728; }
+  .card-c .price { font-size: 19px; font-weight: 700; color: #C9A96E; }
+  .card-c .row2 { font-size: 12px; color: #9B8C7C; margin-bottom: 10px; }
+  .card-c .tags { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+  .card-c .tag { font-size: 10px; padding: 3px 10px; border-radius: 12px; background: #F0EBE3; color: #4A3728; }
+  .card-c .row3 { display: flex; justify-content: space-between; align-items: center; }
+  .card-c .stars { color: #C9A96E; font-size: 14px; letter-spacing: 2px; }
+  .card-c .fav { font-size: 20px; }
+
+  /* highlight on hover */
+  .card-a, .card-b, .card-c { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+  .card-a:hover, .card-b:hover, .card-c:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
+</style>
+</head>
+<body>
+
+<h1 style="text-align:center; font-size:28px; margin-bottom:4px; color:#4A3728;">🧋 奶茶专属名片</h1>
+<p style="text-align:center; font-size:13px; color:#9B8C7C; margin-bottom:10px;">三版预览 — 手机上看效果更好</p>
+
+<h2>A 版 · 拍立得风</h2>
+<p class="sub">大图+白底，像拍立得照片。有实拍图时效果最好，没图用渐变色+emoji</p>
+<div class="card-a">
+  <div class="photo">🧋</div>
+  <div class="body">
+    <div class="row1"><span class="name">黑糖珍珠鲜奶</span><span class="price">¥28</span></div>
+    <div class="row2">喜茶 · 6月8日</div>
+    <div class="tags">
+      <span class="tag">去冰</span><span class="tag">半糖</span><span class="tag">大杯</span>
+    </div>
+    <div class="row3">
+      <span class="stars">★★★★<span style="color:#D4C5B2">★</span></span>
+      <span class="fav">❤️</span>
+    </div>
+  </div>
+</div>
+
+<h2>B 版 · 金边名片</h2>
+<p class="sub">深色底+金色边框，像精致纸质名片。评分越高金色越深</p>
+<div class="card-b">
+  <div class="inner">
+    <div class="row1"><span class="name">茉莉奶绿</span><span class="price">¥18</span></div>
+    <div class="row2">喜茶 · 6月8日 <span class="stars">★★★★★</span></div>
+    <div class="tags">
+      <span class="tag">去冰</span><span class="tag">三分糖</span><span class="tag">中杯</span>
+    </div>
+    <div class="fav">❤️</div>
+  </div>
+</div>
+
+<h2>C 版 · 侧边色带</h2>
+<p class="sub">左侧评分色带，右侧清爽排版。5星=金色，4星=玫瑰金，3星以下=暖灰</p>
+<div class="card-c">
+  <div class="stripe"></div>
+  <div class="body">
+    <div class="row1"><span class="name">杨枝甘露</span><span class="price">¥32</span></div>
+    <div class="row2">喜茶 · 6月8日</div>
+    <div class="tags">
+      <span class="tag">少冰</span><span class="tag">正常糖</span><span class="tag">超大杯</span>
+    </div>
+    <div class="row3">
+      <span class="stars">★★★★★</span>
+      <span class="fav">🤍</span>
+    </div>
+  </div>
+</div>
+
+<p style="text-align:center; margin: 32px 0 20px; color:#9B8C7C; font-size:13px;">
+  你喜欢哪个？告诉我就可以开始做了
+</p>
+
+</body>
+</html>
