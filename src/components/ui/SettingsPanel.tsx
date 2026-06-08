@@ -58,26 +58,37 @@ export default function SettingsPanel() {
       {/* Sync section — most prominent */}
       <div>
         <h2 className="text-lg font-serif font-semibold mb-1" style={{ color: 'var(--color-text)' }}>
-          🔄 跨设备同步
+          🔄 跨设备 / 跨浏览器同步
         </h2>
         <p className="text-xs mb-4 leading-relaxed" style={{ color: 'var(--color-muted)' }}>
-          数据保存在本设备浏览器中，不同设备之间的数据是独立的。使用下方功能可轻松转移数据。
+          数据保存在<b>当前浏览器</b>中。不同设备、不同浏览器（如 Safari 和 Chrome）之间的数据互不相通。通过下方导出/导入可手动迁移数据。
         </p>
 
         {/* Step guide */}
         <div className="rounded-card p-4 mb-4 space-y-2 text-xs leading-relaxed" style={{ backgroundColor: 'var(--color-surface-hover)' }}>
           <div className="flex gap-2">
             <span style={{ color: 'var(--color-accent)', minWidth: '1.2rem' }}>①</span>
-            <span style={{ color: 'var(--color-text)' }}>在<b>旧设备</b>点击「分享/导出备份」</span>
+            <span style={{ color: 'var(--color-text)' }}>在<b>源浏览器</b>中点击「分享/导出备份」</span>
           </div>
           <div className="flex gap-2">
             <span style={{ color: 'var(--color-accent)', minWidth: '1.2rem' }}>②</span>
-            <span style={{ color: 'var(--color-text)' }}>通过微信/邮件/AirDrop 发送到<b>新设备</b></span>
+            <span style={{ color: 'var(--color-text)' }}>通过微信/邮件发送或存到文件</span>
           </div>
           <div className="flex gap-2">
             <span style={{ color: 'var(--color-accent)', minWidth: '1.2rem' }}>③</span>
-            <span style={{ color: 'var(--color-text)' }}>在<b>新设备</b>打开奶茶日记，点击下方导入</span>
+            <span style={{ color: 'var(--color-text)' }}>在<b>目标浏览器</b>打开奶茶日记，导入备份</span>
           </div>
+        </div>
+
+        {/* PWA install hint for mobile */}
+        <div className="rounded-card p-3 mb-4 text-xs leading-relaxed" style={{ backgroundColor: '#FFF8ED', border: '1px solid #E8D5A0' }}>
+          <span style={{ color: '#C9A96E' }}>💡</span>{' '}
+          <span style={{ color: '#4A3728' }}>
+            <b>想装成 App？</b> 用手机自带浏览器打开 →
+            {/iPhone|iPad/.test(navigator.userAgent)
+              ? '点分享按钮 → 添加到主屏幕'
+              : '点菜单 → 安装应用'}
+          </span>
         </div>
 
         <div className="space-y-3">
