@@ -139,6 +139,18 @@ export default function SettingsPanel() {
         </button>
       </div>
 
+      {/* Offline HTML download — works in any browser */}
+      <div>
+        <a
+          href="./offline.html"
+          download="奶茶日记.html"
+          className="block w-full py-3.5 rounded-xl text-sm font-medium text-center transition-opacity hover:opacity-90"
+          style={{ backgroundColor: 'var(--color-card)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
+        >
+          📦 下载离线版（任何浏览器都能用）
+        </a>
+      </div>
+
       <hr style={{ borderColor: 'var(--color-border)' }} />
 
       {/* Theme */}
