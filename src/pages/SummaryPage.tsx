@@ -6,6 +6,7 @@ import EmptyState from '../components/ui/EmptyState';
 import TasteRadar from '../components/charts/TasteRadar';
 import ShopDonut from '../components/charts/ShopDonut';
 import SpendingTrend from '../components/charts/SpendingTrend';
+import ErrorBoundary from '../components/ui/ErrorBoundary';
 import type { Period } from '../types';
 import { PERIOD_LABELS } from '../types';
 
@@ -116,9 +117,15 @@ export default function SummaryPage() {
 
           {/* Charts */}
           <div className="px-4 mt-4 space-y-3">
-            <SpendingTrend entries={entries} />
-            <ShopDonut entries={entries} />
-            <TasteRadar entries={entries} />
+            <ErrorBoundary fallback={<div className="rounded-card p-4 text-xs" style={{backgroundColor:'var(--color-card)',border:'1px solid var(--color-border)',color:'var(--color-muted)'}}>📈 消费趋势加载失败</div>}>
+              <SpendingTrend entries={entries} />
+            </ErrorBoundary>
+            <ErrorBoundary fallback={<div className="rounded-card p-4 text-xs" style={{backgroundColor:'var(--color-card)',border:'1px solid var(--color-border)',color:'var(--color-muted)'}}>🏪 店铺占比加载失败</div>}>
+              <ShopDonut entries={entries} />
+            </ErrorBoundary>
+            <ErrorBoundary fallback={<div className="rounded-card p-4 text-xs" style={{backgroundColor:'var(--color-card)',border:'1px solid var(--color-border)',color:'var(--color-muted)'}}>🎯 口味画像加载失败</div>}>
+              <TasteRadar entries={entries} />
+            </ErrorBoundary>
           </div>
         </>
       )}
