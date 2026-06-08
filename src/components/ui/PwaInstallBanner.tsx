@@ -5,12 +5,13 @@ function isPwa(): boolean {
     || (navigator as any).standalone === true;
 }
 
-type BrowserKind = 'chrome' | 'safari-ios' | 'safari-mac' | 'firefox' | 'samsung' | 'edge' | 'other';
+type BrowserKind = 'chrome' | 'safari-ios' | 'safari-mac' | 'firefox' | 'samsung' | 'edge' | 'xiaomi' | 'other';
 
 function detectBrowser(): BrowserKind {
   const ua = navigator.userAgent;
   if (/iPhone|iPad|iPod/.test(ua)) return 'safari-ios';
   if (/Mac/.test(ua) && /Safari/.test(ua) && !/Chrome/.test(ua)) return 'safari-mac';
+  if (/MiuiBrowser|XiaoMi/i.test(ua)) return 'xiaomi';
   if (/SamsungBrowser/i.test(ua)) return 'samsung';
   if (/Firefox/i.test(ua)) return 'firefox';
   if (/Edg/i.test(ua)) return 'edge';
@@ -22,6 +23,7 @@ const GUIDES: Record<BrowserKind, { text: string; canInstall: boolean }> = {
   'chrome':    { text: '点下方「安装」→ 添加到主屏幕', canInstall: true },
   'edge':      { text: '点下方「安装」→ 添加到主屏幕', canInstall: true },
   'samsung':   { text: '点下方「安装」→ 添加到主屏幕', canInstall: true },
+  'xiaomi':    { text: '点底部菜单「三」→ 添加到桌面', canInstall: false },
   'safari-ios':{ text: '点底部 ↑ 分享 → 添加到主屏幕', canInstall: false },
   'safari-mac':{ text: '点菜单栏 文件 → 添加到程序坞', canInstall: false },
   'firefox':   { text: '点地址栏 ⋯ → 添加到主屏幕', canInstall: false },
