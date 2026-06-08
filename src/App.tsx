@@ -3,6 +3,7 @@ import { TeaDiaryProvider, useTeaDiary } from './context/TeaDiaryContext';
 import TabBar from './components/ui/TabBar';
 import Modal from './components/ui/Modal';
 import StarRating from './components/ui/StarRating';
+import PwaInstallBanner from './components/ui/PwaInstallBanner';
 import JournalPage from './pages/JournalPage';
 import FavoritesPage from './pages/FavoritesPage';
 import SummaryPage from './pages/SummaryPage';
@@ -37,6 +38,9 @@ function AppContent() {
           ⚙️
         </button>
       </header>
+
+      {/* PWA Install Banner */}
+      <PwaInstallBanner />
 
       {/* Page content */}
       <main>{renderPage()}</main>
