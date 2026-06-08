@@ -1,9 +1,10 @@
 import React from 'react';
-import { Line } from 'react-chartjs-2';
+import { Chart } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
+  BarElement,
   PointElement,
   LineElement,
   Filler,
@@ -12,15 +13,22 @@ import {
 } from 'chart.js';
 import type { Entry } from '../../types';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Filler, Tooltip, Legend);
 
 interface Props {
   entries: Entry[];
 }
 
-function computeDaily(entries: Entry[]) {
+interface DayData {
+  label: string;
+  spent: number;
+  count: number;
+  prices: number[];
+}
+
+function computeDaily(entries: Entry[]): { labels: string[]; days: DayData[] } {
   const now = new Date();
-  const days: { label: string; spent: number; count: number }[] = [];
+  const days: DayData[] = [];
 
   for (let i = 29; i >= 0; i--) {
     const d = new Date(now);
@@ -28,51 +36,59 @@ function computeDaily(entries: Entry[]) {
     const key = d.toISOString().slice(0, 10);
     const label = `${d.getMonth() + 1}/${d.getDate()}`;
 
-    let spent = 0;
-    let count = 0;
+    const prices: number[] = [];
     for (const e of entries) {
       if (e.drunkAt.slice(0, 10) === key) {
-        spent += e.price;
-        count++;
+        prices.push(e.price);
       }
     }
-    days.push({ label, spent, count });
+    days.push({
+      label,
+      spent: prices.reduce((a, b) => a + b, 0),
+      count: prices.length,
+      prices,
+    });
   }
 
-  // Thin out labels to ~6
   const step = Math.max(1, Math.floor(days.length / 6));
-  const labels = days.map((d, i) => (i % step === 0 || i === days.length - 1) ? d.label : '');
+  const labels = days.map((d, i) =>
+    i % step === 0 || i === days.length - 1 ? d.label : ''
+  );
 
-  return { labels, data: days };
+  return { labels, days };
 }
 
 export default function SpendingTrend({ entries }: Props) {
-  const { labels, data: days } = computeDaily(entries);
+  const { labels, days } = computeDaily(entries);
+
+  // Scatter points: each drink's price mapped to its day index
+  const scatterData = days.flatMap((day, dayIndex) =>
+    day.prices.map((price) => ({ x: dayIndex, y: price }))
+  );
 
   const chartData = {
     labels,
     datasets: [
       {
-        label: '消费金额',
-        data: days.map(d => d.spent),
-        borderColor: '#C9A96E',
-        backgroundColor: (ctx: any) => {
-          if (!ctx.chart.chartArea) return 'rgba(201,169,110,0.08)';
-          const gradient = ctx.chart.ctx.createLinearGradient(
-            0, ctx.chart.chartArea.top, 0, ctx.chart.chartArea.bottom
-          );
-          gradient.addColorStop(0, 'rgba(201, 169, 110, 0.25)');
-          gradient.addColorStop(1, 'rgba(201, 169, 110, 0.02)');
-          return gradient;
-        },
-        fill: true,
-        tension: 0.4,
+        type: 'bar' as const,
+        label: '日总花费',
+        data: days.map((d) => d.spent),
+        backgroundColor: 'rgba(201, 169, 110, 0.15)',
+        borderColor: 'rgba(201, 169, 110, 0)',
+        borderWidth: 0,
+        borderRadius: 4,
+        order: 2,
+      },
+      {
+        type: 'scatter' as const,
+        label: '单杯价格',
+        data: scatterData,
+        backgroundColor: '#C9A96E',
+        borderColor: '#fff',
         borderWidth: 2,
-        pointRadius: (ctx: any) => ctx.raw > 0 ? 4 : 0,
-        pointBackgroundColor: '#C9A96E',
-        pointBorderColor: '#fff',
-        pointBorderWidth: 2,
-        pointHoverRadius: 6,
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        order: 1,
       },
     ],
   };
@@ -95,32 +111,36 @@ export default function SpendingTrend({ entries }: Props) {
       },
       y: {
         beginAtZero: true,
-        grid: { color: 'rgba(212, 197, 178, 0.15)' },
+        grid: { color: 'rgba(212, 197, 178, 0.12)' },
         ticks: {
           font: { size: 10, family: "'Georgia', serif" },
           color: '#9B8C7C',
           callback: (v: any) => '¥' + v,
-          stepSize: 10,
         },
       },
     },
     plugins: {
-      legend: { display: false },
+      legend: {
+        display: true,
+        position: 'bottom' as const,
+        labels: {
+          boxWidth: 10,
+          padding: 14,
+          font: { size: 10, family: "'Georgia', serif" },
+          color: '#9B8C7C',
+          usePointStyle: true,
+        },
+      },
       tooltip: {
         backgroundColor: '#4A3728',
         titleFont: { family: "'Georgia', serif" },
         bodyFont: { family: "'Georgia', serif" },
-        callbacks: {
-          label: (ctx: any) => {
-            const day = days[ctx.dataIndex];
-            return ` ¥${day.spent} · ${day.count}杯`;
-          },
-        },
       },
     },
   };
 
   const total = days.reduce((s, d) => s + d.spent, 0);
+  const totalCount = days.reduce((s, d) => s + d.count, 0);
 
   return (
     <div className="rounded-card p-4" style={{ backgroundColor: 'var(--color-card)', border: '1px solid var(--color-border)' }}>
@@ -129,10 +149,10 @@ export default function SpendingTrend({ entries }: Props) {
           📈 近30天消费趋势
         </span>
         <span className="text-xs font-semibold" style={{ color: 'var(--color-accent)' }}>
-          合计 ¥{total}
+          {totalCount}杯 · ¥{total}
         </span>
       </div>
-      <Line data={chartData} options={options} />
+      <Chart type="bar" data={chartData} options={options} />
     </div>
   );
 }

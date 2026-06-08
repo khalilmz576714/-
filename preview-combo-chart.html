@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>消费趋势 + 每日价格 — 预览</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #FAF8F5;
+    font-family: Georgia, 'Noto Serif SC', serif;
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+    color: #4A3728;
+  }
+  h1 { font-size: 22px; text-align: center; margin-bottom: 20px; }
+  .chart-box { background: #fff; border-radius: 16px; padding: 16px; margin-bottom: 20px; border: 1px solid #F0EBE3; }
+  .chart-title { font-size: 13px; font-weight: 600; color: #9B8C7C; margin-bottom: 12px; }
+  canvas { width: 100% !important; }
+  h2 { font-size: 15px; margin-bottom: 6px; }
+  .desc { font-size: 12px; color: #9B8C7C; margin-bottom: 14px; line-height: 1.6; }
+  .vote { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; margin: 2px; }
+  .a-tag { background: #F0EBE3; color: #4A3728; }
+  .b-tag { background: #E8EFE0; color: #3d5a2e; }
+</style>
+</head>
+<body>
+
+<h1>📈 30天消费趋势</h1>
+
+<!-- ============== 版本 A ============== -->
+<h2>版本 A · 柱状总消费 + 散点单价</h2>
+<p class="desc">
+  每天一根柱子 = 当日总花费，柱子上的圆点 = 当天每杯奶茶的单价。<br>
+  一眼看清 <b>哪天花得多</b> + <b>每杯多少钱</b>。
+</p>
+<div class="chart-box">
+  <div class="chart-title">近30天 · 合计 ¥286</div>
+  <canvas id="chartA" height="200"></canvas>
+</div>
+
+<!-- ============== 版本 B ============== -->
+<h2>版本 B · 面积线总消费 + 虚线均价</h2>
+<p class="desc">
+  金色面积 = 每日总花费曲线，上面叠加一条 <b>虚线 = 当日均价</b>。<br>
+  适合看 <b>均价波动</b>（哪天喝了贵的）。
+</p>
+<div class="chart-box">
+  <div class="chart-title">近30天 · 合计 ¥286</div>
+  <canvas id="chartB" height="200"></canvas>
+</div>
+
+<script>
+const ctxA = document.getElementById('chartA').getContext('2d');
+const ctxB = document.getElementById('chartB').getContext('2d');
+
+// ===== Fake data =====
+const now = new Date();
+const labels38 = [];
+const totals = [];
+const avgPrices = [];
+const scatter = []; // {x: labelIndex, y: price}
+
+const DRINKS = [
+  { name: '茉莉奶绿', price: 18 }, { name: '黑糖珍珠', price: 28 },
+  { name: '抹茶拿铁', price: 22 }, { name: '杨枝甘露', price: 32 },
+  { name: '草莓奶盖', price: 24 }, { name: '桂花乌龙', price: 16 },
+  { name: '芝士葡萄', price: 26 }, { name: '柠檬茶', price: 12 },
+];
+
+let seed = 42;
+function r() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+
+for (let i = 29; i >= 0; i--) {
+  const d = new Date(now);
+  d.setDate(d.getDate() - i);
+  labels38.push(`${d.getMonth()+1}/${d.getDate()}`);
+  const n = Math.floor(r() * 3); // 0-2 drinks per day
+  let total = 0;
+  for (let j = 0; j < n; j++) {
+    const drink = DRINKS[Math.floor(r() * DRINKS.length)];
+    total += drink.price;
+    scatter.push({ x: 29-i, y: drink.price });
+  }
+  totals.push(total);
+  avgPrices.push(n > 0 ? Math.round(total / n) : null);
+}
+
+// Thin labels
+const step = Math.max(1, Math.floor(labels38.length / 6));
+const thinLabels = labels38.map((l, i) => (i % step === 0 || i === labels38.length - 1) ? l : '');
+
+// ===== Chart A: Bar total + Scatter individual prices =====
+new Chart(ctxA, {
+  type: 'bar',
+  data: {
+    labels: thinLabels,
+    datasets: [
+      {
+        type: 'bar',
+        label: '日消费总额',
+        data: totals,
+        backgroundColor: 'rgba(201, 169, 110, 0.18)',
+        borderColor: 'rgba(201, 169, 110, 0)',
+        borderWidth: 0,
+      },
+      {
+        type: 'scatter',
+        label: '单杯价格',
+        data: scatter,
+        backgroundColor: '#C9A96E',
+        borderColor: '#fff',
+        borderWidth: 2,
+        pointRadius: 6,
+        pointHoverRadius: 8,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    interaction: { intersect: false, mode: 'index' },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 10 }, color: '#9B8C7C', maxRotation: 0 } },
+      y: { beginAtZero: true, grid: { color: 'rgba(212,197,178,0.12)' }, ticks: { font: { size:10 }, color: '#9B8C7C', callback: v => '¥'+v } },
+    },
+    plugins: {
+      legend: { display: true, position: 'bottom', labels: { boxWidth: 12, padding: 16, font: { size: 11 }, color: '#9B8C7C' } },
+      tooltip: { backgroundColor: '#4A3728' },
+    },
+  },
+});
+
+// ===== Chart B: Area line total + Dashed line avg price =====
+new Chart(ctxB, {
+  type: 'line',
+  data: {
+    labels: thinLabels,
+    datasets: [
+      {
+        type: 'line',
+        label: '日消费总额',
+        data: totals,
+        borderColor: '#C9A96E',
+        backgroundColor: function(ctx) {
+          if (!ctx.chart.chartArea) return 'rgba(201,169,110,0.08)';
+          const g = ctx.chart.ctx.createLinearGradient(0, ctx.chart.chartArea.top, 0, ctx.chart.chartArea.bottom);
+          g.addColorStop(0, 'rgba(201,169,110,0.22)');
+          g.addColorStop(1, 'rgba(201,169,110,0.02)');
+          return g;
+        },
+        fill: true,
+        tension: 0.4,
+        borderWidth: 2,
+        pointRadius: v => v.raw > 0 ? 4 : 0,
+        pointBackgroundColor: '#C9A96E',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+      },
+      {
+        type: 'line',
+        label: '当日均价',
+        data: avgPrices,
+        borderColor: '#4A3728',
+        borderDash: [6, 3],
+        borderWidth: 1.5,
+        pointRadius: 3,
+        pointBackgroundColor: '#4A3728',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        fill: false,
+        tension: 0.3,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    interaction: { intersect: false, mode: 'index' },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 10 }, color: '#9B8C7C', maxRotation: 0 } },
+      y: {
+        beginAtZero: true,
+        grid: { color: 'rgba(212,197,178,0.12)' },
+        ticks: { font: { size:10 }, color: '#9B8C7C', callback: v => '¥'+v },
+      },
+    },
+    plugins: {
+      legend: { display: true, position: 'bottom', labels: { boxWidth: 12, padding: 16, font: { size: 11 }, color: '#9B8C7C', usePointStyle: true } },
+      tooltip: { backgroundColor: '#4A3728' },
+    },
+  },
+});
+</script>
+
+<p style="text-align:center; margin:28px 0; color:#9B8C7C; font-size:13px;">
+  你喜欢 A 还是 B？或者想要混合改动？
+</p>
+
+</body>
+</html>
