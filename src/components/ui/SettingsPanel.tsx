@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useTeaDiary } from '../../context/TeaDiaryContext';
 import ThemeSwitcher from './ThemeSwitcher';
+import PwaInstallBanner from './PwaInstallBanner';
 
 export default function SettingsPanel() {
   const { state, setTheme, exportData, importData } = useTeaDiary();
@@ -55,6 +56,9 @@ export default function SettingsPanel() {
 
   return (
     <div className="px-5 py-6 space-y-6 max-w-lg mx-auto">
+      {/* PWA Install Banner */}
+      <PwaInstallBanner />
+
       {/* Sync section — most prominent */}
       <div>
         <h2 className="text-lg font-serif font-semibold mb-1" style={{ color: 'var(--color-text)' }}>

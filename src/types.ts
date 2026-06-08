@@ -28,6 +28,7 @@ export interface Filters {
   sugarLevel: SugarLevel | null;
   customStart: string | null;
   customEnd: string | null;
+  search: string;
 }
 
 export interface Stats {

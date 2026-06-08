@@ -3,6 +3,7 @@ import { useTeaDiary } from '../context/TeaDiaryContext';
 import EntryCard from '../components/cards/EntryCard';
 import EmptyState from '../components/ui/EmptyState';
 import ChipGroup from '../components/ui/ChipGroup';
+import SearchBar from '../components/ui/SearchBar';
 import { PERIOD_LABELS, ICE_LABELS, SUGAR_LABELS } from '../types';
 
 export default function JournalPage() {
@@ -32,6 +33,14 @@ export default function JournalPage() {
             <div className="text-2xl font-bold font-serif mt-0.5">¥{stats.totalSpent}</div>
           </div>
         </div>
+      </div>
+
+      {/* Search */}
+      <div className="px-4 pb-1">
+        <SearchBar
+          value={state.filters.search}
+          onChange={(v) => setFilter({ search: v })}
+        />
       </div>
 
       {/* Filters */}

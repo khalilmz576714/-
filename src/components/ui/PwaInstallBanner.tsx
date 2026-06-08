@@ -71,7 +71,7 @@ export default function PwaInstallBanner() {
 
   return (
     <div
-      className="mx-4 mt-3 px-4 py-3 rounded-card flex items-center gap-3 text-sm"
+      className="px-4 py-3 rounded-card flex items-center gap-3 text-sm"
       style={{
         backgroundColor: 'var(--color-selected-bg)',
         color: 'var(--color-selected-text)',

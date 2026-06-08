@@ -10,7 +10,7 @@ const initialState: DiaryState = {
   activeTab: 'journal',
   activeModal: null,
   editingId: null,
-  filters: { period: null, iceLevel: null, sugarLevel: null, customStart: null, customEnd: null },
+  filters: { period: null, iceLevel: null, sugarLevel: null, customStart: null, customEnd: null, search: '' },
   theme: 'wabisabi',
   dbReady: false,
   dbError: false,
@@ -29,7 +29,7 @@ function reducer(state: DiaryState, action: DiaryAction): DiaryState {
     case 'TOGGLE_FAVORITE':
       return { ...state, entries: state.entries.map((e) => (e.id === action.payload ? { ...e, isFavorite: !e.isFavorite } : e)) };
     case 'SET_TAB':
-      return { ...state, activeTab: action.payload, filters: initialState.filters };
+      return { ...state, activeTab: action.payload, filters: { ...initialState.filters } };
     case 'OPEN_MODAL':
       return { ...state, activeModal: action.payload.modal, editingId: action.payload.editingId || null };
     case 'CLOSE_MODAL':
