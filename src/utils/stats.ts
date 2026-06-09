@@ -61,11 +61,15 @@ export function getFilteredEntries(entries: Entry[], filters: Filters): Entry[] 
   return result;
 }
 
+function round2(n: number): number {
+  return Math.round(n * 100) / 100;
+}
+
 export function computeStats(entries: Entry[], allEntries: Entry[], filters: Filters): Stats {
   const filtered = getFilteredEntries(entries, filters);
-  const totalSpent = filtered.reduce((sum, e) => sum + e.price, 0);
+  const totalSpent = round2(filtered.reduce((sum, e) => sum + e.price, 0));
   const count = filtered.length;
-  const avgPrice = count > 0 ? Math.round((totalSpent / count) * 100) / 100 : 0;
+  const avgPrice = count > 0 ? round2(totalSpent / count) : 0;
   let maxPrice = 0;
   let maxPriceEntry: Entry | null = null;
   for (const e of filtered) {
@@ -115,8 +119,8 @@ function buildComparison(entries: Entry[], period: 'week' | 'month'): Stats['com
     return d >= previousStart && d <= previousEnd;
   });
 
-  const currentSpent = currentEntries.reduce((s, e) => s + e.price, 0);
-  const previousSpent = previousEntries.reduce((s, e) => s + e.price, 0);
+  const currentSpent = round2(currentEntries.reduce((s, e) => s + e.price, 0));
+  const previousSpent = round2(previousEntries.reduce((s, e) => s + e.price, 0));
 
   return {
     currentLabel: period === 'week' ? '本周' : '本月',
@@ -125,7 +129,7 @@ function buildComparison(entries: Entry[], period: 'week' | 'month'): Stats['com
     previousSpent,
     currentCount: currentEntries.length,
     previousCount: previousEntries.length,
-    spentDiff: currentSpent - previousSpent,
+    spentDiff: round2(currentSpent - previousSpent),
     countDiff: currentEntries.length - previousEntries.length,
   };
 }
