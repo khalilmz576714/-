@@ -39,7 +39,8 @@ function computeDaily(entries: Entry[]) {
     for (const e of entries) {
       if (e.drunkAt.slice(0, 10) === key) prices.push(e.price);
     }
-    days.push({ label, spent: prices.reduce((a, b) => a + b, 0), count: prices.length, prices });
+    const spent = Math.round(prices.reduce((a, b) => a + b, 0) * 100) / 100;
+    days.push({ label, spent, count: prices.length, prices });
   }
 
   const step = Math.max(1, Math.floor(days.length / 6));
@@ -107,7 +108,7 @@ export default function SpendingTrend({ entries }: Props) {
     },
   };
 
-  const total = days.reduce((s, d) => s + d.spent, 0);
+  const total = Math.round(days.reduce((s, d) => s + d.spent, 0) * 100) / 100;
   const totalCount = days.reduce((s, d) => s + d.count, 0);
 
   return (
