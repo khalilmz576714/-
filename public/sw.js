@@ -1,5 +1,5 @@
 // Service Worker for 奶茶日记 — offline support
-const CACHE_NAME = 'tea-diary-v3';
+const CACHE_NAME = 'tea-diary-v4';
 const ASSETS = [
   './',
   './index.html',
